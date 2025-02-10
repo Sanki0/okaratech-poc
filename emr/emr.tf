@@ -84,7 +84,7 @@ resource "aws_emr_cluster" "emr_cluster" {
   service_role = aws_iam_role.emr_role.arn
   #step_concurrency_level = 256
   
-  termination_protection = true
+  termination_protection = false
   scale_down_behavior = "TERMINATE_AT_TASK_COMPLETION"
 }
 
