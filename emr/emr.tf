@@ -91,7 +91,7 @@ resource "aws_emr_cluster" "emr_cluster" {
 resource "aws_emr_instance_fleet" "emr_instance_fleet" {
   cluster_id = aws_emr_cluster.emr_cluster.id
   name = "Task"
-  target_on_demand_capacity = 0
+  target_on_demand_capacity = 1
   target_spot_capacity = 0
   instance_type_configs {
     instance_type = var.emr_core_instance_type
