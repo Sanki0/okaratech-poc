@@ -1,0 +1,49 @@
+to pass the variables will be = terraform plan -var-file="vars.tfvars"
+
+to pass the variables will be = terraform apply -var-file="vars.tfvars" -auto-approve
+
+
+# terraform-aws-remote-backend
+This module creates a S3 bucket and a DynamoDB to be used as remote backend
+
+## Importance
+
+This should be initialized as an independent module, and configured only when it is required (probably just one time per project).
+
+
+## Backend initialization
+- First step is to initialize the project and store the `tf.state` file within our home environment. It is important that the backend block within the `providers.tf` file is commented.
+
+```terraform
+terraform {
+# backend "s3" {
+#      bucket         = "fran-s3-terraform-tf-state-bucket" # REPLACE WITH YOUR BUCKET NAME
+#      key            = "01-basics/aws-backend/terraform.tfstate"
+#      region         = "us-east-1"
+#      dynamodb_table = "fran-dynamodb-terraform-state-locking" # REPLACE WITH YOUR DYNAMODB TABLE
+#      encrypt        = true
+#      profile        = "devops" # REPLACE WITH YOUR AWS PROFILE
+#    }
+}
+```
+- After we make sure we have no backend block configured we can initialize the project for the first time.
+```shell
+tf init 
+tf plan 
+tf apply
+```
+- After the resources have been created we should be able to use the S3 bucket and DynamoDB table.
+- Finally, we are able to uncomment the backend block within the `providers.tf` file. To migrate the `tfstate` file we must initialize, again, the project by executing `tf init`.
+
+```terraform
+terraform {
+backend "s3" {
+     bucket         = "fran-s3-terraform-tf-state-bucket" # REPLACE WITH YOUR BUCKET NAME
+     key            = "01-basics/aws-backend/terraform.tfstate"
+     region         = "us-east-1"
+     dynamodb_table = "fran-dynamodb-terraform-state-locking" # REPLACE WITH YOUR DYNAMODB TABLE
+     encrypt        = true
+     profile        = "devops" # REPLACE WITH YOUR AWS PROFILE
+   }
+}
+```
